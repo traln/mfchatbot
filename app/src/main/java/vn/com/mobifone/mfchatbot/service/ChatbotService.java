@@ -15,8 +15,7 @@ import vn.com.mobifone.mfchatbot.param.ChatBotParam;
  * Copyright © 2021 VNPT IT 3. All rights reserved.
  */
 public interface ChatbotService {
-    @GET("mars-photos/api/v1/rovers/curiosity/photos?sol=1000&api_key=DEMO_KEY")
-    Call<MarsPhotosList> getMarsPhotoListCall();
-    @POST("api/Chatbot")
+
+    @POST("api/Chatbot/CapNhatChatBot")
     Call<List<ChatBotModel>> addChatBot(@Body ChatBotParam param);
 }
