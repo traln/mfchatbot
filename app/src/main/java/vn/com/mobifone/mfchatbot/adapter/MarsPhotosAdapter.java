@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import vn.com.mobifone.mfchatbot.R;
 import vn.com.mobifone.mfchatbot.model.MarsPhotos;
-import vn.com.mobifone.mfchatbot.view.RecyclerItemClickListener;
+import vn.com.mobifone.mfchatbot.ui.RecyclerItemClickListener;
 
 /**
  * Created by Lê Nguyên Trà on 18/11/2021.

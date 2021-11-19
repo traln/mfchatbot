@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiClient {
     private static Retrofit retrofit;
-    private static final String BASE_URL = "https://api.nasa.gov/";
+    private static final String BASE_URL = "http://101.99.51.36:9080/";
 
     //If null creates an instance else returns the existing instance
     //This prevents redundant instances

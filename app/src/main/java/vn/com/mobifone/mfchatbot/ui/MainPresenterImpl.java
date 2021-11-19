@@ -1,8 +1,11 @@
-package vn.com.mobifone.mfchatbot.view;
+package vn.com.mobifone.mfchatbot.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import vn.com.mobifone.mfchatbot.model.ChatBotModel;
 import vn.com.mobifone.mfchatbot.model.MarsPhotos;
+import vn.com.mobifone.mfchatbot.param.ChatBotParam;
 
 /**
  * Created by Lê Nguyên Trà on 18/11/2021.
@@ -24,21 +27,39 @@ public class MainPresenterImpl implements MainContract.Presenter, MainContract.I
         this.mainView = null;
     }
 
-    @Override
-    public void requestDataFromServer() {
-        intractor.getMarsPhotosArrayList(this);
-    }
 
     @Override
-    public void onFinished(ArrayList<MarsPhotos> marsPhotosArrayList) {
+    public void addChatBot(ChatBotParam param) {
+        intractor.addChatBot(this,param);
+    }
+
+
+    @Override
+    public void onFinished(ChatBotModel list) {
         if(this.mainView != null){
-            mainView.setDataToRecyclerView(marsPhotosArrayList);
+            mainView.setDataChatBot(list);
             mainView.hideProgress();
         }
     }
 
     @Override
     public void onFailure(Throwable t) {
+        if(this.mainView != null){
+            mainView.onResponseFailure(t);
+            mainView.hideProgress();
+        }
+    }
+
+    @Override
+    public void onAddChatBotFinished(ChatBotModel id) {
+        if(this.mainView != null){
+            mainView.setDataChatBot(id);
+            mainView.hideProgress();
+        }
+    }
+
+    @Override
+    public void onAddChatBotFailure(Throwable t) {
         if(this.mainView != null){
             mainView.onResponseFailure(t);
             mainView.hideProgress();

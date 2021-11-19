@@ -1,4 +1,4 @@
-package vn.com.mobifone.mfchatbot.view;
+package vn.com.mobifone.mfchatbot.ui;
 
 import android.app.Dialog;
 import android.app.DialogFragment;

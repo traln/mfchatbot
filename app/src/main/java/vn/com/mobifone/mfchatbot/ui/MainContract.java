@@ -1,8 +1,11 @@
-package vn.com.mobifone.mfchatbot.view;
+package vn.com.mobifone.mfchatbot.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import vn.com.mobifone.mfchatbot.model.ChatBotModel;
 import vn.com.mobifone.mfchatbot.model.MarsPhotos;
+import vn.com.mobifone.mfchatbot.param.ChatBotParam;
 
 /**
  * Created by Lê Nguyên Trà on 18/11/2021.
@@ -14,7 +17,8 @@ public interface MainContract {
 
         void onDestroy();
 
-        void requestDataFromServer();
+
+        void addChatBot(ChatBotParam param);
 
     }
 
@@ -23,8 +27,10 @@ public interface MainContract {
         void showProgress();
 
         void hideProgress();
+        void setLoadingProgressBar(String message, boolean active);
 
         void setDataToRecyclerView(ArrayList<MarsPhotos> noticeArrayList);
+        void setDataChatBot(ChatBotModel rs);
 
         void onResponseFailure(Throwable throwable);
 
@@ -36,10 +42,15 @@ public interface MainContract {
     interface Intractor {
 
         interface OnFinishedListener {
-            void onFinished(ArrayList<MarsPhotos> marsPhotosArrayList);
+
+            void onFinished(ChatBotModel list);
             void onFailure(Throwable t);
+
+            void onAddChatBotFinished(ChatBotModel list);
+            void onAddChatBotFailure(Throwable t);
         }
 
-        void getMarsPhotosArrayList(OnFinishedListener onFinishedListener);
+        void addChatBot(OnFinishedListener onFinishedListener, ChatBotParam param);
+
     }
 }

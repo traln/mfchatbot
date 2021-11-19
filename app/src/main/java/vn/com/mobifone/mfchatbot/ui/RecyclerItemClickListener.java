@@ -1,4 +1,4 @@
-package vn.com.mobifone.mfchatbot.view;
+package vn.com.mobifone.mfchatbot.ui;
 
 /**
  * Created by Lê Nguyên Trà on 18/11/2021.

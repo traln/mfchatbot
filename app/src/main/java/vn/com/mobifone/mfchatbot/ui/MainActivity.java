@@ -1,29 +1,32 @@
-package vn.com.mobifone.mfchatbot.view;
+package vn.com.mobifone.mfchatbot.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatEditText;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import vn.com.mobifone.mfchatbot.R;
-import vn.com.mobifone.mfchatbot.adapter.MarsPhotosAdapter;
+import vn.com.mobifone.mfchatbot.model.ChatBotModel;
 import vn.com.mobifone.mfchatbot.model.MarsPhotos;
+import vn.com.mobifone.mfchatbot.param.ChatBotParam;
 
 public class MainActivity extends AppCompatActivity implements MainContract.MainView{
 
     private ProgressBar progressBar;
-    private RecyclerView recyclerView;
+    private AppCompatEditText edt_username;
+    private AppCompatEditText edt_content;
+    private AppCompatButton btn_Add;
+    private TextView tv_ID;
+    private TextView tv_Site;
 
     MainContract.Presenter presenter;
 
@@ -31,19 +34,29 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerViewAndToolbarInit();
-        progressBarInit();
+        initView();
+//        progressBarInit();
 
         presenter = new MainPresenterImpl(this, new IntractorImpl());
-        presenter.requestDataFromServer();
+    }
+    private void initView(){
+        edt_username = this.findViewById(R.id.edt_username);
+        edt_content = this.findViewById(R.id.edt_content);
+        btn_Add = this.findViewById(R.id.btn_Add);
+        tv_ID = this.findViewById(R.id.tv_ID);
+        tv_Site = this.findViewById(R.id.tv_Site);
+        btn_Add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatBotParam param=new ChatBotParam(edt_username.getText().toString(),edt_content.getText().toString());
+
+                presenter.addChatBot(param);
+                progressBarInit();
+            }
+        });
     }
 
 
-    private void recyclerViewAndToolbarInit(){
-        recyclerView = this.findViewById(R.id.recyclerViewMarsPhoto);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-        recyclerView.setLayoutManager(layoutManager);
-    }
 
     private void progressBarInit(){
         progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyleLarge);
@@ -73,31 +86,22 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
         progressBar.setVisibility(View.INVISIBLE);
     }
 
-    private RecyclerItemClickListener recyclerItemClickListener = new RecyclerItemClickListener() {
-        @Override
-        public void onItemClick(String marsPhotoURL) {
-            final String TAG = "fullscreenFragmentDialog";
+    @Override
+    public void setLoadingProgressBar(String message, boolean active) {
 
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            Fragment fragment = getFragmentManager().findFragmentByTag(TAG);
-
-            if(fragment != null){
-                fragmentTransaction.remove(fragment);
-            }
-
-            fragmentTransaction.addToBackStack(null);
-
-            DialogFragment dialogFragment = MarsFullscreenDialogFragment.newInstance(marsPhotoURL);
-            dialogFragment.show(fragmentTransaction, TAG);
-        }
-    };
+    }
 
     @Override
-    public void setDataToRecyclerView(ArrayList<MarsPhotos> marsPhotoArrayList) {
-        MarsPhotosAdapter marsPhotosAdapter = new MarsPhotosAdapter(marsPhotoArrayList,
-                recyclerItemClickListener);
-        recyclerView.setAdapter(marsPhotosAdapter);
+    public void setDataToRecyclerView(ArrayList<MarsPhotos> noticeArrayList) {
+
     }
+
+    @Override
+    public void setDataChatBot(ChatBotModel rs) {
+        tv_ID.setText("ID ChatBot: "+rs.getId().toString());
+        tv_Site.setText("Site: "+rs.getContents().toString());
+    }
+
 
     @Override
     public void onResponseFailure(Throwable throwable) {
@@ -110,5 +114,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.Main
     public void onDestroy(){
         super.onDestroy();
         presenter.onDestroy();
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }
